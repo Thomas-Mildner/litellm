@@ -45,10 +45,11 @@ docker:
   after_script:
     - docker logout
   script:
-    - DATE=$(date +'%y%m%d') # Generates '250516' for May 16, 2025
+    - DATE=$(date +'%y%m%d') # e.g. '250516'
     - VERSION_TAG="${DATE}"
-    - "TAG=${HARBOR_HOST}/${HARBOR_PROJECT}/${NAMESPACE}/${PREFIX}/${NAME}:${VERSION_TAG}"
-    - docker build -t $TAG .
-    - docker push $TAG
+    - BASE_TAG="${HARBOR_HOST}/${HARBOR_PROJECT}/${NAMESPACE}/${PREFIX}/${NAME}"
+    - docker build -t "${BASE_TAG}:${VERSION_TAG}" -t "${BASE_TAG}:latest" .
+    - docker push "${BASE_TAG}:${VERSION_TAG}"
+    - docker push "${BASE_TAG}:latest"
   only:
     - main
