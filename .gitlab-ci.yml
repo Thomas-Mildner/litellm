@@ -11,6 +11,10 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
 
+  PREFIX: "functions"
+  NAME: "litellm"
+  NAMESPACE: "console"
+
 
 # test:
 #   stage: test
@@ -36,9 +40,15 @@ docker:
     - docker:dind
   variables:
     DOCKER_DRIVER: overlay2
+  before_script:
+    - echo "$HARBOR_PASSWORD" | docker login --username "$HARBOR_USERNAME" "$HARBOR_HOST" --password-stdin
+  after_script:
+    - docker logout
   script:
-    - docker build -t $CI_REGISTRY_IMAGE:latest .
-    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
-    - docker push $CI_REGISTRY_IMAGE:latest
+    - DATE=$(date +'%y%m%d') # Generates '250516' for May 16, 2025
+    - VERSION_TAG="${DATE}"
+    - "TAG=${HARBOR_HOST}/${HARBOR_PROJECT}/${NAMESPACE}/${PREFIX}/${NAME}:${VERSION}"
+    - docker build -t $TAG .
+    - docker push $TAG
   only:
     - main
