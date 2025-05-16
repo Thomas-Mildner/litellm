@@ -7,9 +7,6 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-from litellm_enterprise.enterprise_callbacks.send_emails.base_email import (
-    BaseEmailLogger,
-)
 from pydantic import BaseModel
 
 import litellm
@@ -107,21 +104,7 @@ class UserManagementEventHooks:
             team_id=response.team_id,
             key_alias=response.key_alias,
         )
-
-        #########################################################
-        ########## V2 USER INVITATION EMAIL ################
-        #########################################################
-        initialized_email_loggers = (
-            litellm.logging_callback_manager.get_custom_loggers_for_type(
-                callback_type=BaseEmailLogger
-            )
-        )
-        if len(initialized_email_loggers) > 0:
-            for email_logger in initialized_email_loggers:
-                if isinstance(email_logger, BaseEmailLogger):
-                    await email_logger.send_user_invitation_email(
-                        event=event,
-                    )
+ 
 
         #########################################################
         ########## LEGACY V1 USER INVITATION EMAIL ################
