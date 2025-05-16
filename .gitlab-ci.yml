@@ -29,15 +29,15 @@ before_script:
 #     - pip install pytest
 #     - pytest tests/litellm
 
-build:
-  stage: build
-  image: python:$PYTHON_VERSION
-  script:
-    - pip install build
-    - python -m build
-  artifacts:
-    paths:
-      - dist/
+#build:
+#  stage: build
+#  image: python:$PYTHON_VERSION
+#  script:
+#    - pip install build
+#    - python -m build
+#  artifacts:
+#    paths:
+#      - dist/
 
 docker:
   stage: docker
