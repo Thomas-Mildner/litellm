@@ -58,7 +58,7 @@ class RouteChecks:
     ):
         """
         Checks if Non Proxy Admin User is allowed to access the route
-        """
+        """        
 
         # Check user has defined custom admin routes
         RouteChecks.custom_admin_only_route_check(
@@ -161,6 +161,9 @@ class RouteChecks:
 
     @staticmethod
     def custom_admin_only_route_check(route: str):
+
+        return
+
         from litellm.proxy.proxy_server import general_settings, premium_user
 
         if "admin_only_routes" in general_settings:

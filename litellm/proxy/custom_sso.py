@@ -19,7 +19,7 @@ from litellm.proxy.management_endpoints.internal_user_endpoints import user_info
 
 
 async def custom_sso_handler(userIDPInfo: OpenID) -> SSOUserDefinedValues:
-    try:
+    try:        
         print("inside custom sso handler")  # noqa
         print(f"userIDPInfo: {userIDPInfo}")  # noqa
 
@@ -36,7 +36,7 @@ async def custom_sso_handler(userIDPInfo: OpenID) -> SSOUserDefinedValues:
             models=[],
             user_id=userIDPInfo.id,
             user_email=userIDPInfo.email,
-            user_role=LitellmUserRoles.INTERNAL_USER.value,
+            user_role=LitellmUserRoles.INTERNAL_USER_VIEW_ONLY.value,
             max_budget=10,
             budget_duration="1d",
         )

@@ -270,6 +270,7 @@ def _is_api_route_allowed(
     """
     - Route b/w api token check and normal token check
     """
+    print(user_obj)
     _user_role = _get_user_role(user_obj=user_obj)
 
     if valid_token is None:
