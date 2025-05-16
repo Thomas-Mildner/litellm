@@ -47,7 +47,7 @@ docker:
   script:
     - DATE=$(date +'%y%m%d') # Generates '250516' for May 16, 2025
     - VERSION_TAG="${DATE}"
-    - "TAG=${HARBOR_HOST}/${HARBOR_PROJECT}/${NAMESPACE}/${PREFIX}/${NAME}:${VERSION}"
+    - "TAG=${HARBOR_HOST}/${HARBOR_PROJECT}/${NAMESPACE}/${PREFIX}/${NAME}:${VERSION_TAG}"
     - docker build -t $TAG .
     - docker push $TAG
   only:
