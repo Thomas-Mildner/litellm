@@ -5,7 +5,7 @@ stages:
   - docker
 
 variables:
-  PYTHON_VERSION: "3.8"
+  PYTHON_VERSION: "3.10"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
 cache:
