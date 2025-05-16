@@ -78,8 +78,7 @@ proxy = [
     "websockets",
     "boto3",
     "mcp",
-    "litellm-proxy-extras",
-    "litellm-enterprise",
+    "litellm-proxy-extras",  
     "rich",
 ]
 
