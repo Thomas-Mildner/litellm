@@ -1,0 +1,57 @@
+stages:
+  - lint
+  - test
+  - build
+  - docker
+
+variables:
+  PYTHON_VERSION: "3.8"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+cache:
+  paths:
+    - .cache/pip
+
+before_script:
+  - python --version
+  - pip install --upgrade pip
+  - pip install -r requirements.txt
+
+lint:
+  stage: lint
+  image: python:$PYTHON_VERSION
+  script:
+    - pip install ruff black
+    - ruff check .
+    - black --check .
+
+test:
+  stage: test
+  image: python:$PYTHON_VERSION
+  script:
+    - pip install pytest
+    - pytest tests/litellm
+
+build:
+  stage: build
+  image: python:$PYTHON_VERSION
+  script:
+    - pip install build
+    - python -m build
+  artifacts:
+    paths:
+      - dist/
+
+docker:
+  stage: docker
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - docker push $CI_REGISTRY_IMAGE:latest
+  only:
+    - main
