@@ -45,7 +45,7 @@ docker:
   after_script:
     - docker logout
   script:
-    - DATE=$(date +'%y%m%d') # e.g. '250516'
+    - DATE=$(date +'%y%m%d-%H%M') # e.g. '250516-1452'
     - VERSION_TAG="${DATE}"
     - BASE_TAG="${HARBOR_HOST}/${HARBOR_PROJECT}/${NAMESPACE}/${PREFIX}/${NAME}"
     - docker build -t "${BASE_TAG}:${VERSION_TAG}" -t "${BASE_TAG}:latest" .
