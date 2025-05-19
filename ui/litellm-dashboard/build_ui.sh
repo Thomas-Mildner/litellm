@@ -41,7 +41,7 @@ if [ $? -eq 0 ]; then
   rm -rf "$destination_dir"/*
 
   # Copy the contents of the output directory to the specified destination
-  cp -r ./out/* "$destination_dir"
+  cp -r ./out/* "../../litellm/proxy/_experimental/out"
 
   echo "Deployment completed."
 else
