@@ -11,9 +11,9 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
 
-  PREFIX: "functions"
+  PREFIX: ""
   NAME: "litellm"
-  NAMESPACE: "console"
+  NAMESPACE: "ai"
 
 
 # test:
