@@ -423,7 +423,7 @@ ui_message += "\n\n💸 [```LiteLLM Model Cost Map```](https://models.litellm.ai
 custom_swagger_message = "[**Customize Swagger Docs**](https://docs.litellm.ai/docs/proxy/enterprise#swagger-docs---custom-routes--branding)"
 
 ### CUSTOM BRANDING [ENTERPRISE FEATURE] ###
-_title = os.getenv("DOCS_TITLE", "LiteLLM API") if premium_user else "LiteLLM API"
+_title = os.getenv("DOCS_TITLE", "LiteLLM API") if premium_user else "artcodix LiteLLM API"
 _description = (
     os.getenv(
         "DOCS_DESCRIPTION",
