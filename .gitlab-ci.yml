@@ -11,7 +11,7 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
 
-  PREFIX: ""
+  PREFIX: "proxy"
   NAME: "litellm"
   NAMESPACE: "ai"
 
