@@ -536,7 +536,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
               <Title level={4}> ✨ Security Settings</Title>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
                 <div>
-                  <Button onClick={() => premiumUser === true ? setIsAddSSOModalVisible(true) : message.error("Only premium users can add SSO")}>Add SSO</Button>
+                  <Button onClick={() => setIsAddSSOModalVisible(true)}>Add SSO</Button>
                 </div>
                 <div>
                   <Button onClick={handleShowAllowedIPs}>Allowed IPs</Button>
