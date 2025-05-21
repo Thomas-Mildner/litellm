@@ -17,10 +17,10 @@ spec:
         {{- end }}
     spec:
       serviceAccountName: {{ include "litellm.serviceAccountName" . }}
-        {{- if .Values.image.imagePullSecrets }}
+      {{- if .Values.image.imagePullSecrets }}
       imagePullSecrets:
-          - name: {{ .Values.image.imagePullSecrets }}
-        {{- end }}
+       {{- toYaml .Values.image.imagePullSecrets | nindent 4 }}
+      {{- end }}
       containers:
         - name: prisma-migrations
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "main-%s" .Chart.AppVersion) }}"
