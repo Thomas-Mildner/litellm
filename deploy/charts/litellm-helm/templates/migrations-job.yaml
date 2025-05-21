@@ -17,10 +17,14 @@ spec:
         {{- end }}
     spec:
       serviceAccountName: {{ include "litellm.serviceAccountName" . }}
+        {{- if .Values.image.imagePullSecrets }}
+      imagePullSecrets:
+          - name: {{ .Values.image.imagePullSecrets }}
+        {{- end }}
       containers:
         - name: prisma-migrations
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "main-%s" .Chart.AppVersion) }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}     
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           command: ["python", "litellm/proxy/prisma_migration.py"]
