@@ -351,6 +351,7 @@ async def get_user_info_from_db(
     user_defined_values: Optional[SSOUserDefinedValues],
 ) -> Optional[Union[LiteLLM_UserTable, NewUserResponse]]:
     try:
+        print("get_user_info_from_db called")  # noqa
         user_info: Optional[Union[LiteLLM_UserTable, NewUserResponse]] = (
             await get_existing_user_info_from_db(
                 user_id=cast(
@@ -412,7 +413,9 @@ def apply_user_info_values_to_sso_user_defined_values(
     if user_info is not None and user_info.user_id is not None:
         user_defined_values["user_id"] = user_info.user_id
 
+    #TODO change me!
     if user_info is None or user_info.user_role is None:
+        print(user_info)
         user_defined_values["user_role"] = LitellmUserRoles.INTERNAL_USER_VIEW_ONLY
     else:
         user_defined_values["user_role"] = user_info.user_role
@@ -542,6 +545,7 @@ async def auth_callback(request: Request):  # noqa: PLR0915
 
     if user_custom_sso is not None:
         if asyncio.iscoroutinefunction(user_custom_sso):
+            print(result)
             user_defined_values = await user_custom_sso(result)  # type: ignore
         else:
             raise ValueError("user_custom_sso must be a coroutine function")
@@ -686,6 +690,9 @@ async def insert_sso_user(
     verbose_proxy_logger.debug(
         f"Inserting SSO user into DB. User values: {user_defined_values}"
     )
+    print("insert_sso_user called")  # noqa
+    print(user_defined_values)
+
     if result_openid is None:
         raise ValueError("result_openid is None")
     if isinstance(result_openid, dict):
@@ -706,6 +713,7 @@ async def insert_sso_user(
                 litellm.internal_user_budget_duration
             )
 
+    # TODO change me here
     if user_defined_values["user_role"] is None:
         user_defined_values["user_role"] = LitellmUserRoles.INTERNAL_USER_VIEW_ONLY
 

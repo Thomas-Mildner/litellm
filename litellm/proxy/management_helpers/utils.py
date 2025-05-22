@@ -43,7 +43,7 @@ def get_new_internal_user_defaults(
         ),
         "user_email": user_email or user_info.get("user_email", None),
         "user_id": user_id,
-        "user_role": "internal_user",
+        "user_role": "internal_user",  #todo maybe change me?
     }
 
     non_null_dict = {}
