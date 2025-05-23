@@ -248,9 +248,12 @@ async def get_generic_sso_response(
             LitellmUserRoles.PROXY_ADMIN_VIEW_ONLY: 2,
             LitellmUserRoles.INTERNAL_USER_VIEW_ONLY: 1,
         }
+        
+        defaultRole = LitellmUserRoles.INTERNAL_USER_VIEW_ONLY
 
         if not raw_roles:
-            return LitellmUserRoles.INTERNAL_USER_VIEW_ONLY  #default user role if no roles are found
+            verbose_proxy_logger.info("No roles found in SSO response - use default value")
+            return defaultRole  #default user role if no roles are found
 
          # Convert incoming string roles to enum members if they match
         matched_roles = []
@@ -265,9 +268,10 @@ async def get_generic_sso_response(
         if matched_roles:
             highest_priority_role = max(matched_roles, key=lambda r: ROLE_PRIORITY[r])
         else:
-            highest_priority_role = LitellmUserRoles.INTERNAL_USER_VIEW_ONLY # use default
+            verbose_proxy_logger.info("No matching roles found in SSO response - use default value")
+            highest_priority_role = defaultRole
 
-        verbose_proxy_logger.debug("Final choosen role from sso_response", highest_priority_role)
+        verbose_proxy_logger.debug(f"Final chosen role from sso_response: {highest_priority_role.value}")
         return highest_priority_role.value
 
     def generic_response_convertor(response, jwt_handler):
@@ -610,10 +614,6 @@ async def auth_callback(request: Request):  # noqa: PLR0915
             user_role=user_role,
             budget_duration=internal_user_budget_duration,
         )
-
-    verbose_proxy_logger.error(
-        f"SChALALA: user_defined_values: {user_defined_values}; user_id: {user_id}; user_email: {user_email}"
-    )
 
     user_info = await get_user_info_from_db(
         result=result,
