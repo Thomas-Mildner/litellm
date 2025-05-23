@@ -875,7 +875,7 @@ class BudgetNewRequest(LiteLLMPydanticObjectBase):
     budget_id: Optional[str] = Field(default=None, description="The unique budget id.")
     max_budget: Optional[float] = Field(
         default=None,
-        description="Requests will fail if this budget (in USD) is exceeded.",
+        description="Requests will fail if this budget (in EUR) is exceeded.",
     )
     soft_budget: Optional[float] = Field(
         default=None,
@@ -2574,7 +2574,7 @@ class ProviderBudgetResponseObject(LiteLLMPydanticObjectBase):
     Configuration for a single provider's budget settings
     """
 
-    budget_limit: Optional[float]  # Budget limit in USD for the time period
+    budget_limit: Optional[float]  # Budget limit in EUR for the time period
     time_period: Optional[str]  # Time period for budget (e.g., '1d', '30d', '1mo')
     spend: Optional[float] = 0.0  # Current spend for this provider
     budget_reset_at: Optional[str] = None  # When the current budget period resets
@@ -2801,7 +2801,7 @@ class DefaultInternalUserParams(LiteLLMPydanticObjectBase):
     )
     max_budget: Optional[float] = Field(
         default=None,
-        description="Default maximum budget (in USD) for new users created",
+        description="Default maximum budget (in EUR) for new users created",
     )
     budget_duration: Optional[str] = Field(
         default=None,

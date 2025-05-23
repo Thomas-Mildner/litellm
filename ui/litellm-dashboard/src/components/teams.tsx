@@ -583,8 +583,8 @@ const Teams: React.FC<TeamProps> = ({
                   <TableHeaderCell>Team Name</TableHeaderCell>
                   <TableHeaderCell>Team ID</TableHeaderCell>
                   <TableHeaderCell>Created</TableHeaderCell>
-                  <TableHeaderCell>Spend (USD)</TableHeaderCell>
-                  <TableHeaderCell>Budget (USD)</TableHeaderCell>
+                  <TableHeaderCell>Spend (EUR)</TableHeaderCell>
+                  <TableHeaderCell>Budget (EUR)</TableHeaderCell>
                   <TableHeaderCell>Models</TableHeaderCell>
                   <TableHeaderCell>Organization</TableHeaderCell>
                   <TableHeaderCell>Info</TableHeaderCell>
@@ -909,7 +909,7 @@ const Teams: React.FC<TeamProps> = ({
                   </Select2>
                 </Form.Item>
 
-                <Form.Item label="Max Budget (USD)" name="max_budget">
+                <Form.Item label="Max Budget (EUR)" name="max_budget">
                   <NumericalInput step={0.01} precision={2} width={200} />
                 </Form.Item>
                 <Form.Item

@@ -204,8 +204,8 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
             <Card>
                 <Text>Budget Status</Text>
                 <div className="mt-2">
-                <Title>${orgData.spend.toFixed(6)}</Title>
-                <Text>of {orgData.litellm_budget_table.max_budget === null ? "Unlimited" : `$${orgData.litellm_budget_table.max_budget}`}</Text>
+                <Title>{orgData.spend.toFixed(6)}€</Title>
+                <Text>of {orgData.litellm_budget_table.max_budget === null ? "Unlimited" : `${orgData.litellm_budget_table.max_budget}€`}</Text>
                 {orgData.litellm_budget_table.budget_duration && (
                     <Text className="text-gray-500">Reset: {orgData.litellm_budget_table.budget_duration}</Text>
                 )}
@@ -271,7 +271,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
                             <Text className="font-mono">{member.user_role}</Text>
                         </TableCell>
                         <TableCell>
-                            <Text>${member.spend.toFixed(6)}</Text>
+                            <Text>{member.spend.toFixed(6)}€</Text>
                         </TableCell>
                         <TableCell>
                             <Text>{new Date(member.created_at).toLocaleString()}</Text>
@@ -369,7 +369,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
                     </Select>
                   </Form.Item>
 
-                  <Form.Item label="Max Budget (USD)" name="max_budget">
+                  <Form.Item label="Max Budget (EUR)" name="max_budget">
                     <NumericalInput step={0.01} precision={2} style={{ width: "100%" }} />
                   </Form.Item>
 
@@ -433,7 +433,7 @@ const OrganizationInfoView: React.FC<OrganizationInfoProps> = ({
                   </div>
                   <div>
                     <Text className="font-medium">Budget</Text>
-                    <div>Max: {orgData.litellm_budget_table.max_budget !== null ? `$${orgData.litellm_budget_table.max_budget}` : 'No Limit'}</div>
+                    <div>Max: {orgData.litellm_budget_table.max_budget !== null ? `${orgData.litellm_budget_table.max_budget}€` : 'No Limit'}</div>
                     <div>Reset: {orgData.litellm_budget_table.budget_duration || 'Never'}</div>
                   </div>
                 </div>

@@ -122,9 +122,9 @@ def trade(model_name: str) -> List[Trade]:  # type: ignore
                 {portfolio}
                 ```
                 """.replace(
-                        "{market_data}", "BTC: 64,000 USD\nETH: 3,500 USD"
+                        "{market_data}", "BTC: 64,000 EUR\nETH: 3,500 EUR"
                     ).replace(
-                        "{portfolio}", "USD: 1000, BTC: 0.1, ETH: 0.2"
+                        "{portfolio}", "EUR: 1000, BTC: 0.1, ETH: 0.2"
                     ),
                 },
             ],

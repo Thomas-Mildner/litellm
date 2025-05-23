@@ -135,7 +135,7 @@ export function UserEditView({
       </Form.Item>
 
       <Form.Item
-        label="Max Budget (USD)"
+        label="Max Budget (EUR)"
         name="max_budget"
       >
         <InputNumber

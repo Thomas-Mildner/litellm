@@ -354,7 +354,7 @@ const NewUsagePage: React.FC<NewUsagePageProps> = ({
                           index="date"
                           categories={["metrics.spend"]}
                           colors={["cyan"]}
-                          valueFormatter={(value) => `$${value.toFixed(2)}`}
+                          valueFormatter={(value) => `${value.toFixed(2)}€`}
                           yAxisWidth={100}
                           showLegend={false}
                           customTooltip={({ payload, active }) => {
@@ -400,7 +400,7 @@ const NewUsagePage: React.FC<NewUsagePageProps> = ({
                           index="key"
                           categories={["spend"]}
                           colors={["cyan"]}
-                          valueFormatter={(value) => `$${value.toFixed(2)}`}
+                          valueFormatter={(value) => `${value.toFixed(2)}€`}
                           layout="vertical"
                           yAxisWidth={200}
                           showLegend={false}
@@ -435,7 +435,7 @@ const NewUsagePage: React.FC<NewUsagePageProps> = ({
                               data={getProviderSpend()}
                               index="provider"
                               category="spend"
-                              valueFormatter={(value) => `$${value.toFixed(2)}`}
+                              valueFormatter={(value) => `${value.toFixed(2)}€`}
                               colors={["cyan"]}
                             />
                           </Col>

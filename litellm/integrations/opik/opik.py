@@ -250,7 +250,7 @@ class OpikLogger(CustomBatchLogger):
         if "response_cost" in kwargs:
             metadata["cost"] = {
                 "total_tokens": kwargs["response_cost"],
-                "currency": "USD",
+                "currency": "EUR",
             }
         if "response_cost_failure_debug_info" in kwargs:
             metadata["response_cost_failure_debug_info"] = kwargs[

@@ -223,7 +223,7 @@ export default function KeyInfoView({ keyId, onClose, keyData, accessToken, user
                 <Text>Spend</Text>
                 <div className="mt-2">
                   <Title>${Number(keyData.spend).toFixed(4)}</Title>
-                  <Text>of {keyData.max_budget !== null ? `$${keyData.max_budget}` : "Unlimited"}</Text>
+                  <Text>of {keyData.max_budget !== null ? `${keyData.max_budget}€` : "Unlimited"}</Text>
                 </div>
               </Card>
 
@@ -313,12 +313,12 @@ export default function KeyInfoView({ keyId, onClose, keyData, accessToken, user
 
                   <div>
                     <Text className="font-medium">Spend</Text>
-                    <Text>${Number(keyData.spend).toFixed(4)} USD</Text>
+                    <Text>${Number(keyData.spend).toFixed(4)} EUR</Text>
                   </div>
 
                   <div>
                     <Text className="font-medium">Budget</Text>
-                    <Text>{keyData.max_budget !== null ? `$${keyData.max_budget} USD` : "Unlimited"}</Text>
+                    <Text>{keyData.max_budget !== null ? `${keyData.max_budget} €` : "Unlimited"}</Text>
                   </div>
 
                   <div>

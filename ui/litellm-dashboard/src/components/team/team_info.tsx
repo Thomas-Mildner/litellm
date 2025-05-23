@@ -251,8 +251,8 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
               <Card>
                 <Text>Budget Status</Text>
                 <div className="mt-2">
-                  <Title>${info.spend.toFixed(6)}</Title>
-                  <Text>of {info.max_budget === null ? "Unlimited" : `$${info.max_budget}`}</Text>
+                  <Title>{info.spend.toFixed(6)}€</Title>
+                  <Text>of {info.max_budget === null ? "Unlimited" : `${info.max_budget}€`}</Text>
                   {info.budget_duration && (
                     <Text className="text-gray-500">Reset: {info.budget_duration}</Text>
                   )}
@@ -362,7 +362,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                     </Select>
                   </Form.Item>
 
-                  <Form.Item label="Max Budget (USD)" name="max_budget">
+                  <Form.Item label="Max Budget (EUR)" name="max_budget">
                     <NumericalInput step={0.01} precision={2} style={{ width: "100%" }} />
                   </Form.Item>
 
@@ -456,7 +456,7 @@ const TeamInfoView: React.FC<TeamInfoProps> = ({
                   </div>
                   <div>
                     <Text className="font-medium">Budget</Text>
-                      <div>Max: {info.max_budget !== null ? `$${info.max_budget}` : 'No Limit'}</div>
+                      <div>Max: {info.max_budget !== null ? `${info.max_budget}€` : 'No Limit'}</div>
                     <div>Reset: {info.budget_duration || 'Never'}</div>
                   </div>
                   <div>

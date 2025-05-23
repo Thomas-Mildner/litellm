@@ -367,7 +367,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                           index="date"
                           categories={["metrics.spend"]}
                           colors={["cyan"]}
-                          valueFormatter={(value) => `$${value.toFixed(2)}`}
+                          valueFormatter={(value) => `${value.toFixed(2)}€`}
                           yAxisWidth={100}
                           showLegend={false}
                           customTooltip={({ payload, active }) => {
@@ -376,7 +376,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                             return (
                               <div className="bg-white p-4 shadow-lg rounded-lg border">
                                 <p className="font-bold">{data.date}</p>
-                                <p className="text-cyan-500">Total Spend: ${data.metrics.spend.toFixed(2)}</p>
+                                <p className="text-cyan-500">Total Spend: {data.metrics.spend.toFixed(2)}€</p>
                                 <p className="text-gray-600">Total Requests: {data.metrics.api_requests}</p>
                                 <p className="text-gray-600">Successful: {data.metrics.successful_requests}</p>
                                 <p className="text-gray-600">Failed: {data.metrics.failed_requests}</p>
@@ -420,7 +420,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                           index="metadata.alias"
                           categories={["metrics.spend"]}
                           colors={["cyan"]}
-                          valueFormatter={(value) => `$${value.toFixed(4)}`}
+                          valueFormatter={(value) => `${value.toFixed(4)}€`}
                           layout="vertical"
                           showLegend={false}
                           yAxisWidth={100}
@@ -486,7 +486,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                     index="key"
                     categories={["spend"]}
                     colors={["cyan"]}
-                    valueFormatter={(value) => `$${value.toFixed(2)}`}
+                    valueFormatter={(value) => `${value.toFixed(2)}€`}
                     layout="vertical"
                     yAxisWidth={200}
                     showLegend={false}
@@ -508,7 +508,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                           data={getProviderSpend()}
                           index="provider"
                           category="spend"
-                          valueFormatter={(value) => `$${value.toFixed(2)}`}
+                          valueFormatter={(value) => `${value.toFixed(2)}€`}
                           colors={["cyan", "blue", "indigo", "violet", "purple"]}
                         />
                       </Col>

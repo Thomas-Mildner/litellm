@@ -93,9 +93,9 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({
         cell: (info: any) => info.getValue() || "-",
       },
     {
-      header: "Spend (USD)",
+      header: "Spend (EUR)",
       accessorKey: "spend",
-      cell: (info: any) => `$${Number(info.getValue()).toFixed(2)}`,
+      cell: (info: any) => `${Number(info.getValue()).toFixed(2)}€`,
     },
   ];
 

@@ -109,7 +109,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ visible, possibleUIRoles,
             </Form.Item>
 
             <Form.Item
-              label="Spend (USD)"
+              label="Spend (EUR)"
               name="spend"
               tooltip="(float) - Spend of all LLM calls completed by this user"
               help="Across all keys (including keys with team_id)."
@@ -118,7 +118,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ visible, possibleUIRoles,
             </Form.Item>
 
             <Form.Item
-              label="User Budget (USD)"
+              label="User Budget (EUR)"
               name="max_budget"
               tooltip="(float) - Maximum budget of this user"
               help="Maximum budget of this user."

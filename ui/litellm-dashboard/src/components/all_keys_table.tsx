@@ -322,13 +322,13 @@ export function AllKeysTable({
     {
       id: "spend",
       accessorKey: "spend",
-      header: "Spend (USD)",
+      header: "Spend (EUR)",
       cell: (info) => Number(info.getValue()).toFixed(4),
     },
     {
       id: "max_budget",
       accessorKey: "max_budget",
-      header: "Budget (USD)",
+      header: "Budget (EUR)",
       cell: (info) =>
         info.getValue() !== null && info.getValue() !== undefined
           ? info.getValue()

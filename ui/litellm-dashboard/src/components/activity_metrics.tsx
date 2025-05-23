@@ -28,8 +28,8 @@ const ModelSection = ({ modelName, metrics }: { modelName: string; metrics: Mode
         </Card>
         <Card>
           <Text>Total Spend</Text>
-          <Title>${metrics.total_spend.toFixed(2)}</Title>
-          <Text>${(metrics.total_spend / metrics.total_successful_requests).toFixed(3)} per successful request</Text>
+          <Title>{metrics.total_spend.toFixed(2)}€</Title>
+          <Text>{(metrics.total_spend / metrics.total_successful_requests).toFixed(3)}€ per successful request</Text>
         </Card>
       </Grid>
 
@@ -64,7 +64,7 @@ const ModelSection = ({ modelName, metrics }: { modelName: string; metrics: Mode
             index="date"
             categories={["metrics.spend"]}
             colors={["green"]}
-            valueFormatter={(value: number) => `$${value.toFixed(2)}`}
+            valueFormatter={(value: number) => `${value.toFixed(2)}€`}
           />
         </Card>
 
@@ -188,7 +188,7 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({ modelMetrics }
           </Card>
           <Card>
             <Text>Total Spend</Text>
-            <Title>${totalMetrics.total_spend.toFixed(2)}</Title>
+            <Title>{totalMetrics.total_spend.toFixed(2)}€</Title>
           </Card>
         </Grid>
 
@@ -226,7 +226,7 @@ export const ActivityMetrics: React.FC<ActivityMetricsProps> = ({ modelMetrics }
               <div className="flex justify-between items-center w-full">
                 <Title>{modelMetrics[modelName].label || 'Unknown Item'}</Title>
                 <div className="flex space-x-4 text-sm text-gray-500">
-                  <span>${modelMetrics[modelName].total_spend.toFixed(2)}</span>
+                  <span>{modelMetrics[modelName].total_spend.toFixed(2)}€</span>
                   <span>{modelMetrics[modelName].total_requests.toLocaleString()} requests</span>
                 </div>
               </div>

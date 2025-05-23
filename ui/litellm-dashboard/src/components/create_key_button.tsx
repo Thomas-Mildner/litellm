@@ -530,14 +530,14 @@ const CreateKey: React.FC<CreateKeyProps> = ({
                   className="mt-4"
                   label={
                     <span>
-                      Max Budget (USD){' '}
-                      <Tooltip title="Maximum amount in USD this key can spend. When reached, the key will be blocked from making further requests">
+                      Max Budget (EUR){' '}
+                      <Tooltip title="Maximum amount in Euro this key can spend. When reached, the key will be blocked from making further requests">
                         <InfoCircleOutlined style={{ marginLeft: '4px' }} />
                       </Tooltip>
                     </span>
                   }
                   name="max_budget"
-                  help={`Budget cannot exceed team max budget: $${team?.max_budget !== null && team?.max_budget !== undefined ? team?.max_budget : "unlimited"}`}
+                  help={`Budget cannot exceed team max budget: ${team?.max_budget !== null && team?.max_budget !== undefined ? team?.max_budget : "unlimited"} €`}
                   rules={[
                     {
                       validator: async (_, value) => {
@@ -548,7 +548,7 @@ const CreateKey: React.FC<CreateKeyProps> = ({
                           value > team.max_budget
                         ) {
                           throw new Error(
-                            `Budget cannot exceed team max budget: $${team.max_budget}`
+                            `Budget cannot exceed team max budget: ${team.max_budget}€`
                           );
                         }
                       },

@@ -283,7 +283,7 @@ const UsagePage: React.FC<UsagePageProps> = ({
   console.log(`End date is ${endTime}`);
 
   const valueFormatter = (number: number) =>
-    `$ ${number.toFixed(2)}`;
+    ` ${number.toFixed(2)}€`;
 
   const fetchAndSetData = async (
     fetchFunction: () => Promise<any>,
@@ -681,7 +681,7 @@ const UsagePage: React.FC<UsagePageProps> = ({
                     layout="vertical"
                     showXAxis={false}
                     showLegend={false}
-                    valueFormatter={(value) => `$${value.toFixed(2)}`}
+                    valueFormatter={(value) => `${value.toFixed(2)}€`}
                   />
                 </Card>
               </Col>
@@ -701,7 +701,7 @@ const UsagePage: React.FC<UsagePageProps> = ({
                       index="provider"
                       category="spend"
                       colors={["cyan"]}
-                      valueFormatter={(value) => `$${value.toFixed(2)}`}
+                      valueFormatter={(value) => `${value.toFixed(2)}€`}
                     />
                   </Col>
                   <Col numColSpan={1}>

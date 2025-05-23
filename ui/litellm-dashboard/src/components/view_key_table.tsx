@@ -487,7 +487,7 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
             <Form.Item name="key_alias" label="Key Alias">
               <TextInput disabled={true} />
             </Form.Item>
-            <Form.Item name="max_budget" label="Max Budget (USD)">
+            <Form.Item name="max_budget" label="Max Budget (EUR)">
               <InputNumber
                 step={0.01}
                 precision={2}
