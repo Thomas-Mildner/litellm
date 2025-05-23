@@ -242,13 +242,13 @@ async def get_generic_sso_response(
         Get the user role from the SSO response.
         """
         ROLE_PRIORITY = {
-            LitellmUserRoles.ORG_ADMIN: 5,
-            LitellmUserRoles.PROXY_ADMIN: 4,
-            LitellmUserRoles.INTERNAL_USER: 3,
-            LitellmUserRoles.PROXY_ADMIN_VIEW_ONLY: 2,
+            LitellmUserRoles.PROXY_ADMIN: 5,
+            LitellmUserRoles.PROXY_ADMIN_VIEW_ONLY: 4,
+            LitellmUserRoles.ORG_ADMIN: 3,
+            LitellmUserRoles.INTERNAL_USER: 2,
             LitellmUserRoles.INTERNAL_USER_VIEW_ONLY: 1,
         }
-        
+
         defaultRole = LitellmUserRoles.INTERNAL_USER_VIEW_ONLY
 
         if not raw_roles:
