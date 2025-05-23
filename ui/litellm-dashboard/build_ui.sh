@@ -1,49 +1,54 @@
 #!/bin/bash
 
-# Check if nvm is not installed
-if ! command -v nvm &> /dev/null; then
-  # Install nvm
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+set -e  # Exit immediately if a command exits with a non-zero status
 
-  # Source nvm script in the current session
+# Ensure nvm is installed and load it
+if ! command -v nvm &> /dev/null; then
+  echo "nvm not found, installing..."
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 fi
 
-# Use nvm to set the required Node.js version
-nvm use v18.17.0
-
-# Check if nvm use was successful
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to switch to Node.js v18.17.0. Deployment aborted."
-  exit 1
+# Ensure desired Node.js version is installed and used
+if ! nvm ls v18.17.0 | grep -q 'v18.17.0'; then
+  echo "Node.js v18.17.0 not found, installing..."
+  nvm install v18.17.0
 fi
 
-# print contents of ui_colors.json
+# Use desired Node.js version
+nvm use v18.17.0 || {
+  echo "Error: Failed to switch to Node.js v18.17.0. Deployment aborted."
+  exit 1
+}
+
+# Ensure pnpm is installed
+if ! command -v pnpm &> /dev/null; then
+  echo "pnpm not found, installing..."
+  npm install -g pnpm
+fi
+
+# Install dependencies
+pnpm install
+
+# Print contents of ui_colors.json (optional debug/info)
 echo "Contents of ui_colors.json:"
 cat ui_colors.json
 
-# Run npm build
-npm run build
+# Run the build
+pnpm run build
 
-# Check if the build was successful
-if [ $? -eq 0 ]; then
-  echo "Build successful. Copying files..."
+# If build is successful, proceed
+echo "Build successful. Copying files..."
 
-  # echo current dir
-  echo
-  pwd
+# Echo current directory
+pwd
 
-  # Specify the destination directory
-  destination_dir="../../litellm/proxy/_experimental/out"
+# Define destination
+destination_dir="../../litellm/proxy/_experimental/out"
 
-  # Remove existing files in the destination directory
-  rm -rf "$destination_dir"/*
+# Clean destination and copy new files
+rm -rf "$destination_dir"/*
+cp -r ./out/* "$destination_dir"
 
-  # Copy the contents of the output directory to the specified destination
-  cp -r ./out/* "../../litellm/proxy/_experimental/out"
-
-  echo "Deployment completed."
-else
-  echo "Build failed. Deployment aborted."
-fi
+echo "Deployment completed."
