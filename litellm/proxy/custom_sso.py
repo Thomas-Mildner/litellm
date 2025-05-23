@@ -37,7 +37,7 @@ async def custom_sso_handler(userIDPInfo: OpenID) -> SSOUserDefinedValues:
 
                # Extract role from Keycloak token
         # Adjust this depending on your Keycloak claim structure
-        roles = userIDPInfo.userinfo.get("realm_access", {}).get("roles", [])
+        roles = userIDPInfo.roles
         print(f"Roles from Keycloak: {roles}")
 
         # Determine the first matching role

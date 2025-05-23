@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union, cast
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
+from types import SimpleNamespace
 
 import litellm
 from litellm._logging import verbose_proxy_logger
@@ -236,6 +237,59 @@ async def get_generic_sso_response(
         userinfo_endpoint=generic_userinfo_endpoint,
     )
 
+    def get_litellm_ui_user_role_from_sso_response(raw_roles: list[str]) -> LitellmUserRoles:     
+        """
+        Get the user role from the SSO response.
+        """
+        ROLE_PRIORITY = {
+            LitellmUserRoles.ORG_ADMIN: 5,
+            LitellmUserRoles.PROXY_ADMIN: 4,
+            LitellmUserRoles.INTERNAL_USER: 3,
+            LitellmUserRoles.PROXY_ADMIN_VIEW_ONLY: 2,
+            LitellmUserRoles.INTERNAL_USER_VIEW_ONLY: 1,
+        }
+
+        if not raw_roles:
+            return LitellmUserRoles.INTERNAL_USER_VIEW_ONLY  #default user role if no roles are found
+
+         # Convert incoming string roles to enum members if they match
+        matched_roles = []
+        for role in raw_roles:
+            if role.startswith("litellm_ui_"):
+                clean_role = role.replace("litellm_ui_", "")
+                try:
+                    enum_role = LitellmUserRoles(clean_role)
+                    matched_roles.append(enum_role)
+                except ValueError:
+                    continue  # Skip invalid roles
+        if matched_roles:
+            highest_priority_role = max(matched_roles, key=lambda r: ROLE_PRIORITY[r])
+        else:
+            highest_priority_role = LitellmUserRoles.INTERNAL_USER_VIEW_ONLY # use default
+
+        verbose_proxy_logger.debug("Final choosen role from sso_response", highest_priority_role)
+        return highest_priority_role.value
+
+    def generic_response_convertor(response, jwt_handler):
+        """
+        Converts the response from the provider into your own artcodix structure.
+        """
+        # Log or capture everything from response
+        token_data = response.get("token", {})
+        raw_roles = response.get("roles", [])
+        role = get_litellm_ui_user_role_from_sso_response(raw_roles)
+
+        # Combine all data
+        full_data = {
+            **response, # all original fields
+            "mappedUI_Role": role,
+        }
+
+        verbose_proxy_logger.debug("Full SSO response: %s", full_data)
+        # Return object with attribute access
+        return SimpleNamespace(**full_data)
+    
+
     def response_convertor(response, client):
         return generic_response_convertor(
             response=response,
@@ -404,7 +458,7 @@ async def get_user_info_from_db(
     return None
 
 
-def apply_user_info_values_to_sso_user_defined_values(
+def apply_user_info_values_to_sso_user_defined_values( 
     user_info: Optional[Union[LiteLLM_UserTable, NewUserResponse]],
     user_defined_values: Optional[SSOUserDefinedValues],
 ) -> Optional[SSOUserDefinedValues]:
@@ -414,11 +468,7 @@ def apply_user_info_values_to_sso_user_defined_values(
         user_defined_values["user_id"] = user_info.user_id
 
     #TODO change me!
-    if user_info is None or user_info.user_role is None:
-        print(user_info)
-        user_defined_values["user_role"] = LitellmUserRoles.INTERNAL_USER_VIEW_ONLY
-    else:
-        user_defined_values["user_role"] = user_info.user_role
+    #user_defined_values["user_role"] = user_info.user_role
 
     return user_defined_values
 
@@ -514,6 +564,8 @@ async def auth_callback(request: Request):  # noqa: PLR0915
         generic_user_role_attribute_name = os.getenv(
             "GENERIC_USER_ROLE_ATTRIBUTE", "role"
         )
+
+        print(result)
         user_id = getattr(result, "id", None)
         user_email = getattr(result, "email", None)
         user_role = getattr(result, generic_user_role_attribute_name, None)  # type: ignore
@@ -555,9 +607,13 @@ async def auth_callback(request: Request):  # noqa: PLR0915
             user_id=user_id,
             user_email=user_email,
             max_budget=max_internal_user_budget,
-            user_role=None,
+            user_role=user_role,
             budget_duration=internal_user_budget_duration,
         )
+
+    verbose_proxy_logger.error(
+        f"SChALALA: user_defined_values: {user_defined_values}; user_id: {user_id}; user_email: {user_email}"
+    )
 
     user_info = await get_user_info_from_db(
         result=result,
@@ -713,7 +769,7 @@ async def insert_sso_user(
                 litellm.internal_user_budget_duration
             )
 
-    # TODO change me here
+ 
     if user_defined_values["user_role"] is None:
         user_defined_values["user_role"] = LitellmUserRoles.INTERNAL_USER_VIEW_ONLY
 

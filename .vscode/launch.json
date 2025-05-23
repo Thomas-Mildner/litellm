@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Uvicorn App",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "litellm.proxy.proxy_server:app",
+        "--host",
+        "localhost",
+        "--port",
+        "4000",
+        "--reload"
+      ],
+      "envFile": "${workspaceFolder}/.env",
+      "jinja": true
+    }
+  ]
+}
