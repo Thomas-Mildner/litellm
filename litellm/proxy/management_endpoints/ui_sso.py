@@ -17,6 +17,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple, Union, cast
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from types import SimpleNamespace
+from datetime import datetime, timezone
 
 import litellm
 from litellm._logging import verbose_proxy_logger
@@ -281,12 +282,13 @@ async def get_generic_sso_response(
         # Log or capture everything from response
         token_data = response.get("token", {})
         raw_roles = response.get("roles", [])
-        role = get_litellm_ui_user_role_from_sso_response(raw_roles)
+        role = get_litellm_ui_user_role_from_sso_response(raw_roles)       
 
         # Combine all data
         full_data = {
             **response, # all original fields
             "mappedUI_Role": role,
+            "provider": 'keycloak'
         }
 
         verbose_proxy_logger.debug("Full SSO response: %s", full_data)
@@ -383,6 +385,10 @@ async def get_existing_user_info_from_db(
     proxy_logging_obj: ProxyLogging,
 ) -> Optional[LiteLLM_UserTable]:
     try:
+
+        if(user_id is None and user_email is not None):
+            user_id = user_email
+
         user_info = await get_user_object(
             user_id=user_id,
             user_email=user_email,
@@ -448,6 +454,15 @@ async def get_user_info_from_db(
                 prisma_client=prisma_client,
             )
 
+        # if user does exist but role from keycloak could be changed - check and update user
+        if(user_info is not None and user_info.user_role != result.mappedUI_Role):
+            # Update user role if it has changed
+            user_info.user_role = result.mappedUI_Role
+            user_info.updated_at =datetime.now(timezone.utc)
+            await prisma_client.db.litellm_usertable.update(
+                where={"user_id": user_info.user_id},
+                data={"user_role": user_info.user_role, "updated_at": user_info.updated_at},
+            )
         await SSOAuthenticationHandler.add_user_to_teams_from_sso_response(
             result=result,
             user_info=user_info,
