@@ -28,8 +28,9 @@ if ! command -v pnpm &> /dev/null; then
   npm install -g pnpm
 fi
 
-# Install dependencies
-pnpm install
+# Install dependencies without manual confirmation
+echo "Installing dependencies..."
+yes | pnpm install
 
 # Print contents of ui_colors.json (optional debug/info)
 echo "Contents of ui_colors.json:"
