@@ -4,10 +4,7 @@ import type { MenuProps } from "antd";
 import { Dropdown } from "antd";
 import { Organization } from "@/components/networking";
 import { defaultOrg } from "@/components/common_components/default_org";
-import { 
-  UserOutlined,
-  LogoutOutlined
-} from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
 import { clearTokenCookies } from "@/utils/cookieUtils";
 import { fetchProxySettings } from "@/utils/proxyUtils";
 
@@ -63,18 +60,27 @@ const Navbar: React.FC<NavbarProps> = ({
       label: (
         <div className="py-1">
           <p className="text-sm text-gray-600">Role: {userRole}</p>
-          <p className="text-sm text-gray-600">Email: {userEmail || "Unknown"}</p>
-          <p className="text-sm text-gray-600"><UserOutlined /> {userID}</p>
-          <p className="text-sm text-gray-600">Premium User: {String(premiumUser)}</p>
+          <p className="text-sm text-gray-600">
+            Email: {userEmail || "Unknown"}
+          </p>
+          <p className="text-sm text-gray-600">
+            <UserOutlined /> {userID}
+          </p>
+          <p className="text-sm text-gray-600">
+            Premium User: {String(premiumUser)}
+          </p>
         </div>
       ),
     },
     {
       key: "2",
-      label: <p className="text-sm hover:text-gray-900" onClick={handleLogout}><LogoutOutlined /> Logout</p>,
-    }
+      label: (
+        <p className="text-sm hover:text-gray-900" onClick={handleLogout}>
+          <LogoutOutlined /> Logout
+        </p>
+      ),
+    },
   ];
-
 
   return (
     <nav className="bg-white border-b border-gray-200 sticky top-0 z-10">
@@ -83,11 +89,7 @@ const Navbar: React.FC<NavbarProps> = ({
           {/* Left side with correct logo positioning */}
           <div className="flex items-center flex-shrink-0">
             <Link href="/" className="flex items-center">
-              <img
-                src={imageUrl}
-                alt="LiteLLM Brand"
-                className="h-8 w-auto"
-              />
+              <img src={imageUrl} alt="LiteLLM Brand" className="h-8 w-auto" />
             </Link>
           </div>
 
@@ -99,16 +101,16 @@ const Navbar: React.FC<NavbarProps> = ({
               rel="noopener noreferrer"
               className="text-[13px] text-gray-600 hover:text-gray-900 transition-colors"
             >
-              Docs
+              External Docs
             </a>
 
-            <Dropdown 
-              menu={{ 
+            <Dropdown
+              menu={{
                 items: userItems,
                 style: {
-                  padding: '4px',
-                  marginTop: '4px'
-                }
+                  padding: "4px",
+                  marginTop: "4px",
+                },
               }}
             >
               <button className="inline-flex items-center text-[13px] text-gray-600 hover:text-gray-900 transition-colors">
@@ -119,7 +121,12 @@ const Navbar: React.FC<NavbarProps> = ({
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </button>
             </Dropdown>
