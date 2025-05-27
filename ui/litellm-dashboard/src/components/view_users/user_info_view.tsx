@@ -14,9 +14,14 @@ import {
   Badge,
 } from "@tremor/react";
 import { ArrowLeftIcon, TrashIcon } from "@heroicons/react/outline";
-import { userInfoCall, userDeleteCall, userUpdateUserCall, modelAvailableCall } from "../networking";
+import {
+  userInfoCall,
+  userDeleteCall,
+  userUpdateUserCall,
+  modelAvailableCall,
+} from "../networking";
 import { message } from "antd";
-import { rolesWithWriteAccess } from '../../utils/roles';
+import { rolesWithWriteAccess } from "../../utils/roles";
 import { UserEditView } from "../user_edit_view";
 
 interface UserInfoViewProps {
@@ -45,7 +50,14 @@ interface UserInfo {
   teams: any[] | null;
 }
 
-export default function UserInfoView({ userId, onClose, accessToken, userRole, onDelete, possibleUIRoles }: UserInfoViewProps) {
+export default function UserInfoView({
+  userId,
+  onClose,
+  accessToken,
+  userRole,
+  onDelete,
+  possibleUIRoles,
+}: UserInfoViewProps) {
   const [userData, setUserData] = useState<UserInfo | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,16 +65,32 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
   const [userModels, setUserModels] = useState<string[]>([]);
 
   React.useEffect(() => {
-    console.log(`userId: ${userId}, userRole: ${userRole}, accessToken: ${accessToken}`)
+    console.log(
+      `userId: ${userId}, userRole: ${userRole}, accessToken: ${accessToken}`
+    );
     const fetchData = async () => {
       try {
         if (!accessToken) return;
-        const data = await userInfoCall(accessToken, userId, userRole || "", false, null, null, true);
+        const data = await userInfoCall(
+          accessToken,
+          userId,
+          userRole || "",
+          false,
+          null,
+          null,
+          true
+        );
         setUserData(data);
 
         // Fetch available models
-        const modelDataResponse = await modelAvailableCall(accessToken, userId, userRole || "");
-        const availableModels = modelDataResponse.data.map((model: any) => model.id);
+        const modelDataResponse = await modelAvailableCall(
+          accessToken,
+          userId,
+          userRole || ""
+        );
+        const availableModels = modelDataResponse.data.map(
+          (model: any) => model.id
+        );
         setUserModels(availableModels);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -95,7 +123,7 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
       if (!accessToken || !userData) return;
 
       const response = await userUpdateUserCall(accessToken, formValues, null);
-      
+
       // Update local state with new values
       setUserData({
         ...userData,
@@ -105,7 +133,7 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
           models: formValues.models,
           max_budget: formValues.max_budget,
           metadata: formValues.metadata,
-        }
+        },
       });
 
       message.success("User updated successfully");
@@ -119,8 +147,8 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
   if (isLoading) {
     return (
       <div className="p-4">
-        <Button 
-          icon={ArrowLeftIcon} 
+        <Button
+          icon={ArrowLeftIcon}
           variant="light"
           onClick={onClose}
           className="mb-4"
@@ -135,8 +163,8 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
   if (!userData) {
     return (
       <div className="p-4">
-        <Button 
-          icon={ArrowLeftIcon} 
+        <Button
+          icon={ArrowLeftIcon}
           variant="light"
           onClick={onClose}
           className="mb-4"
@@ -152,8 +180,8 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <Button 
-            icon={ArrowLeftIcon} 
+          <Button
+            icon={ArrowLeftIcon}
             variant="light"
             onClick={onClose}
             className="mb-4"
@@ -179,11 +207,19 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
       {isDeleteModalOpen && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div
+              className="fixed inset-0 transition-opacity"
+              aria-hidden="true"
+            >
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
 
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
 
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -201,11 +237,7 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
                 </div>
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <Button
-                  onClick={handleDelete}
-                  color="red"
-                  className="ml-2"
-                >
+                <Button onClick={handleDelete} color="red" className="ml-2">
                   Delete
                 </Button>
                 <Button onClick={() => setIsDeleteModalOpen(false)}>
@@ -230,8 +262,15 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
               <Card>
                 <Text>Spend</Text>
                 <div className="mt-2">
-                  <Title>${Number(userData.user_info?.spend || 0).toFixed(4)}</Title>
-                  <Text>of {userData.user_info?.max_budget !== null ? `$${userData.user_info.max_budget}` : "Unlimited"}</Text>
+                  <Title>
+                    ${Number(userData.user_info?.spend || 0).toFixed(4)}
+                  </Title>
+                  <Text>
+                    of{" "}
+                    {userData.user_info?.max_budget !== null
+                      ? `${userData.user_info.max_budget}€`
+                      : "Unlimited"}
+                  </Text>
                 </div>
               </Card>
 
@@ -252,7 +291,8 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
               <Card>
                 <Text>Personal Models</Text>
                 <div className="mt-2">
-                  {userData.user_info?.models?.length && userData.user_info?.models?.length > 0 ? (
+                  {userData.user_info?.models?.length &&
+                  userData.user_info?.models?.length > 0 ? (
                     userData.user_info?.models?.map((model, index) => (
                       <Text key={index}>{model}</Text>
                     ))
@@ -269,11 +309,13 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
             <Card>
               <div className="flex justify-between items-center mb-4">
                 <Title>User Settings</Title>
-                {!isEditing && userRole && rolesWithWriteAccess.includes(userRole) && (
-                  <Button variant="light" onClick={() => setIsEditing(true)}>
-                    Edit Settings
-                  </Button>
-                )}
+                {!isEditing &&
+                  userRole &&
+                  rolesWithWriteAccess.includes(userRole) && (
+                    <Button variant="light" onClick={() => setIsEditing(true)}>
+                      Edit Settings
+                    </Button>
+                  )}
               </div>
 
               {isEditing && userData ? (
@@ -294,7 +336,7 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
                     <Text className="font-medium">User ID</Text>
                     <Text className="font-mono">{userData.user_id}</Text>
                   </div>
-                  
+
                   <div>
                     <Text className="font-medium">Email</Text>
                     <Text>{userData.user_info?.user_email || "Not Set"}</Text>
@@ -307,12 +349,24 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
 
                   <div>
                     <Text className="font-medium">Created</Text>
-                    <Text>{userData.user_info?.created_at ? new Date(userData.user_info.created_at).toLocaleString() : "Unknown"}</Text>
+                    <Text>
+                      {userData.user_info?.created_at
+                        ? new Date(
+                            userData.user_info.created_at
+                          ).toLocaleString()
+                        : "Unknown"}
+                    </Text>
                   </div>
 
                   <div>
                     <Text className="font-medium">Last Updated</Text>
-                    <Text>{userData.user_info?.updated_at ? new Date(userData.user_info.updated_at).toLocaleString() : "Unknown"}</Text>
+                    <Text>
+                      {userData.user_info?.updated_at
+                        ? new Date(
+                            userData.user_info.updated_at
+                          ).toLocaleString()
+                        : "Unknown"}
+                    </Text>
                   </div>
 
                   <div>
@@ -336,7 +390,8 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
                   <div>
                     <Text className="font-medium">Models</Text>
                     <div className="flex flex-wrap gap-2 mt-1">
-                      {userData.user_info?.models?.length && userData.user_info?.models?.length > 0 ? (
+                      {userData.user_info?.models?.length &&
+                      userData.user_info?.models?.length > 0 ? (
                         userData.user_info?.models?.map((model, index) => (
                           <span
                             key={index}
@@ -372,7 +427,11 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
                   <div>
                     <Text className="font-medium">Metadata</Text>
                     <pre className="bg-gray-100 p-2 rounded text-xs overflow-auto mt-1">
-                      {JSON.stringify(userData.user_info?.metadata || {}, null, 2)}
+                      {JSON.stringify(
+                        userData.user_info?.metadata || {},
+                        null,
+                        2
+                      )}
                     </pre>
                   </div>
                 </div>
@@ -383,4 +442,4 @@ export default function UserInfoView({ userId, onClose, accessToken, userRole, o
       </TabGroup>
     </div>
   );
-} 
+}

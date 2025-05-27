@@ -438,8 +438,8 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                                     key={entity}
                                     className="text-sm text-gray-600"
                                   >
-                                    {metrics.metadata.team_alias || entity}: $
-                                    {metrics.metrics.spend.toFixed(2)}
+                                    {metrics.metadata.team_alias || entity}:{" "}
+                                    {metrics.metrics.spend.toFixed(2)}€
                                   </p>
                                 );
                               }
@@ -508,7 +508,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                                 <TableRow key={entity.metadata.id}>
                                   <TableCell>{entity.metadata.alias}</TableCell>
                                   <TableCell>
-                                    ${entity.metrics.spend.toFixed(4)}
+                                    {entity.metrics.spend.toFixed(4)}€
                                   </TableCell>
                                   <TableCell className="text-green-600">
                                     {entity.metrics.successful_requests.toLocaleString()}
@@ -603,7 +603,7 @@ const EntityUsage: React.FC<EntityUsageProps> = ({
                               <TableRow key={provider.provider}>
                                 <TableCell>{provider.provider}</TableCell>
                                 <TableCell>
-                                  ${provider.spend.toFixed(2)}
+                                  {provider.spend.toFixed(2)}€
                                 </TableCell>
                                 <TableCell className="text-green-600">
                                   {provider.successful_requests.toLocaleString()}

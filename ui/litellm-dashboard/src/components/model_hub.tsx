@@ -178,13 +178,13 @@ const ModelHub: React.FC<ModelHubProps> = ({
                     <Text>
                       Input Cost Per 1M Tokens (EUR):{" "}
                       {model?.input_cost_per_token
-                        ? `$${(model.input_cost_per_token * 1_000_000).toFixed(2)}`
+                        ? `${(model.input_cost_per_token * 1_000_000).toFixed(2)}€`
                         : "Unknown"}
                     </Text>
                     <Text>
                       Output Cost Per 1M Tokens (EUR):{" "}
                       {model?.output_cost_per_token
-                        ? `$${(model.output_cost_per_token * 1_000_000).toFixed(2)}`
+                        ? `${(model.output_cost_per_token * 1_000_000).toFixed(2)}€`
                         : "Unknown"}
                     </Text>
                   </div>
@@ -259,7 +259,7 @@ const ModelHub: React.FC<ModelHubProps> = ({
               <TabPanels>
                 <TabPanel>
                   <Text>
-                    <strong>Model Group:</strong> 
+                    <strong>Model Group:</strong>
                     <pre>{JSON.stringify(selectedModel, null, 2)}</pre>
                   </Text>
                 </TabPanel>

@@ -15,28 +15,28 @@ interface TopKeyViewProps {
   teams: any[] | null;
 }
 
-const TopKeyView: React.FC<TopKeyViewProps> = ({ 
-  topKeys, 
-  accessToken, 
-  userID, 
+const TopKeyView: React.FC<TopKeyViewProps> = ({
+  topKeys,
+  accessToken,
+  userID,
   userRole,
-  teams
+  teams,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [keyData, setKeyData] = useState<any | undefined>(undefined);
-  const [viewMode, setViewMode] = useState<'chart' | 'table'>('table');
+  const [viewMode, setViewMode] = useState<"chart" | "table">("table");
 
   const handleKeyClick = async (item: any) => {
     if (!accessToken) return;
-    
+
     try {
       const keyInfo = await keyInfoV1Call(accessToken, item.api_key);
       const transformedKeyData = transformKeyInfo(keyInfo);
 
       setKeyData(transformedKeyData);
       setSelectedKey(item.api_key);
-      setIsModalOpen(true);  // Open modal when key is clicked
+      setIsModalOpen(true); // Open modal when key is clicked
     } catch (error) {
       console.error("Error fetching key info:", error);
     }
@@ -58,13 +58,13 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({
   // Handle escape key
   React.useEffect(() => {
     const handleEscapeKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isModalOpen) {
+      if (e.key === "Escape" && isModalOpen) {
         handleClose();
       }
     };
 
-    document.addEventListener('keydown', handleEscapeKey);
-    return () => document.removeEventListener('keydown', handleEscapeKey);
+    document.addEventListener("keydown", handleEscapeKey);
+    return () => document.removeEventListener("keydown", handleEscapeKey);
   }, [isModalOpen]);
 
   // Define columns for the table view
@@ -75,23 +75,25 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({
       cell: (info: any) => (
         <div className="overflow-hidden">
           <Tooltip title={info.getValue() as string}>
-            <Button 
+            <Button
               size="xs"
               variant="light"
               className="font-mono text-blue-500 bg-blue-50 hover:bg-blue-100 text-xs font-normal px-2 py-0.5 text-left overflow-hidden truncate max-w-[200px]"
               onClick={() => handleKeyClick(info.row.original)}
             >
-              {info.getValue() ? `${(info.getValue() as string).slice(0, 7)}...` : "-"}
+              {info.getValue()
+                ? `${(info.getValue() as string).slice(0, 7)}...`
+                : "-"}
             </Button>
           </Tooltip>
         </div>
       ),
     },
     {
-        header: "Key Alias",
-        accessorKey: "key_alias",
-        cell: (info: any) => info.getValue() || "-",
-      },
+      header: "Key Alias",
+      accessorKey: "key_alias",
+      cell: (info: any) => info.getValue() || "-",
+    },
     {
       header: "Spend (EUR)",
       accessorKey: "spend",
@@ -103,22 +105,22 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({
     <>
       <div className="mb-4 flex justify-end items-center">
         <div className="flex space-x-2">
-        <button
-            onClick={() => setViewMode('table')}
-            className={`px-3 py-1 text-sm rounded-md ${viewMode === 'table' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}
+          <button
+            onClick={() => setViewMode("table")}
+            className={`px-3 py-1 text-sm rounded-md ${viewMode === "table" ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-700"}`}
           >
             Table View
           </button>
           <button
-            onClick={() => setViewMode('chart')}
-            className={`px-3 py-1 text-sm rounded-md ${viewMode === 'chart' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}
+            onClick={() => setViewMode("chart")}
+            className={`px-3 py-1 text-sm rounded-md ${viewMode === "chart" ? "bg-blue-100 text-blue-700" : "bg-gray-100 text-gray-700"}`}
           >
             Chart View
           </button>
         </div>
       </div>
 
-      {viewMode === 'chart' ? (
+      {viewMode === "chart" ? (
         <div className="relative">
           <BarChart
             className="mt-4 h-40 cursor-pointer hover:opacity-90"
@@ -131,7 +133,9 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({
             layout="vertical"
             showXAxis={false}
             showLegend={false}
-            valueFormatter={(value) => value ? `$${value.toFixed(2)}` : "No Key Alias"}
+            valueFormatter={(value) =>
+              value ? `${value.toFixed(2)}€` : "No Key Alias"
+            }
             onValueChange={(item) => handleKeyClick(item)}
             showTooltip={true}
             customTooltip={(props) => {
@@ -141,11 +145,15 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({
                   <div className="space-y-1.5">
                     <div className="text-sm">
                       <span className="text-gray-300">Key: </span>
-                      <span className="font-mono text-gray-100">{item?.api_key?.slice(0, 10)}...</span>
+                      <span className="font-mono text-gray-100">
+                        {item?.api_key?.slice(0, 10)}...
+                      </span>
                     </div>
                     <div className="text-sm">
                       <span className="text-gray-300">Spend: </span>
-                      <span className="text-white font-medium">${item?.spend.toFixed(2)}</span>
+                      <span className="text-white font-medium">
+                        ${item?.spend.toFixed(2)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -165,39 +173,56 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({
         </div>
       )}
 
-      {isModalOpen && selectedKey && keyData && (
-        console.log('Rendering modal with:', { isModalOpen, selectedKey, keyData }),
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-          onClick={handleOutsideClick}
-        >
-          <div className="bg-white rounded-lg shadow-xl relative w-11/12 max-w-6xl max-h-[90vh] overflow-y-auto min-h-[750px]">
-            {/* Close button */}
-            <button
-              onClick={handleClose}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none"
-              aria-label="Close"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+      {isModalOpen &&
+        selectedKey &&
+        keyData &&
+        (console.log("Rendering modal with:", {
+          isModalOpen,
+          selectedKey,
+          keyData,
+        }),
+        (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            onClick={handleOutsideClick}
+          >
+            <div className="bg-white rounded-lg shadow-xl relative w-11/12 max-w-6xl max-h-[90vh] overflow-y-auto min-h-[750px]">
+              {/* Close button */}
+              <button
+                onClick={handleClose}
+                className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 focus:outline-none"
+                aria-label="Close"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
 
-            {/* Content */}
-            <div className="p-6 h-full">
-              <KeyInfoView
-                keyId={selectedKey}
-                onClose={handleClose}
-                keyData={keyData}
-                accessToken={accessToken}
-                userID={userID}
-                userRole={userRole}
-                teams={teams}
-              />
+              {/* Content */}
+              <div className="p-6 h-full">
+                <KeyInfoView
+                  keyId={selectedKey}
+                  onClose={handleClose}
+                  keyData={keyData}
+                  accessToken={accessToken}
+                  userID={userID}
+                  userRole={userRole}
+                  teams={teams}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        ))}
     </>
   );
 };
