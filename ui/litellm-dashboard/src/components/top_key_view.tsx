@@ -152,7 +152,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({
                     <div className="text-sm">
                       <span className="text-gray-300">Spend: </span>
                       <span className="text-white font-medium">
-                        ${item?.spend.toFixed(2)}
+                        {item?.spend.toFixed(2)}€
                       </span>
                     </div>
                   </div>

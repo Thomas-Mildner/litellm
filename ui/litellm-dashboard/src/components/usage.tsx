@@ -307,7 +307,7 @@ const UsagePage: React.FC<UsagePageProps> = ({
   console.log(`Start date is ${startTime}`);
   console.log(`End date is ${endTime}`);
 
-  const valueFormatter = (number: number) => ` ${number.toFixed(2)}€`;
+  const valueFormatter = (number: number) => `${number.toFixed(2)}€`;
 
   const fetchAndSetData = async (
     fetchFunction: () => Promise<any>,
