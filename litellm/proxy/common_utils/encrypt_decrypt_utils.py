@@ -46,6 +46,9 @@ def decrypt_value_helper(
 
     try:
         if isinstance(value, str):
+            verbose_proxy_logger.debug(
+                f"Decrypting value: {value} with signing_key: {signing_key}"
+            )
             decoded_b64 = base64.b64decode(value)
             value = decrypt_value(value=decoded_b64, signing_key=signing_key)  # type: ignore
             return value
