@@ -1,4 +1,5 @@
 #### CRUD ENDPOINTS for UI Settings #####
+import os
 from typing import Any, List, Union
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -14,7 +15,6 @@ router = APIRouter()
 
 class IPAddress(BaseModel):
     ip: str
-
 
 @router.get(
     "/get/allowed_ips",
@@ -281,3 +281,17 @@ async def update_default_team_settings(settings: DefaultTeamSSOParams):
         in_memory_var=litellm.default_team_params,
         success_message="Default team settings updated successfully",
     )
+
+
+@router.get('/get/currencySettings', tags=["Currency Configuration"], include_in_schema=False)
+async def get_currency_settings():
+    """
+    Get the current currency settings.
+    Returns a structured object with values and descriptions for UI display.
+    """
+    
+    # Load existing config
+    return ({
+        "currency": os.getenv("FRONTEND_CURRENCY", "USD"),
+        "locale": os.getenv("FRONTEND_LOCALE", "en-US")
+    })
