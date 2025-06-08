@@ -5,6 +5,7 @@ import { add } from "date-fns";
 import { regenerateKeyCall } from "./networking";
 import { KeyResponse } from "./key_team_helpers/key_list";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { getCurrencyCode } from "@/utils/currencyUtils";
 
 interface RegenerateKeyModalProps {
   selectedToken: KeyResponse | null;
@@ -83,7 +84,11 @@ export function RegenerateKeyModal({
     setIsRegenerating(true);
     try {
       const formValues = await form.validateFields();
-      const response = await regenerateKeyCall(accessToken, selectedToken.token, formValues);
+      const response = await regenerateKeyCall(
+        accessToken,
+        selectedToken.token,
+        formValues
+      );
       setRegeneratedKey(response.key);
       message.success("API Key regenerated successfully");
     } catch (error) {
@@ -105,22 +110,26 @@ export function RegenerateKeyModal({
       title="Regenerate API Key"
       open={visible}
       onCancel={handleClose}
-      footer={regeneratedKey ? [
-        <Button key="close" onClick={handleClose}>
-          Close
-        </Button>,
-      ] : [
-        <Button key="cancel" onClick={handleClose} className="mr-2">
-          Cancel
-        </Button>,
-        <Button 
-          key="regenerate" 
-          onClick={handleRegenerateKey}
-          disabled={isRegenerating}
-        >
-          {isRegenerating ? "Regenerating..." : "Regenerate"}
-        </Button>,
-      ]}
+      footer={
+        regeneratedKey
+          ? [
+              <Button key="close" onClick={handleClose}>
+                Close
+              </Button>,
+            ]
+          : [
+              <Button key="cancel" onClick={handleClose} className="mr-2">
+                Cancel
+              </Button>,
+              <Button
+                key="regenerate"
+                onClick={handleRegenerateKey}
+                disabled={isRegenerating}
+              >
+                {isRegenerating ? "Regenerating..." : "Regenerate"}
+              </Button>,
+            ]
+      }
     >
       {regeneratedKey ? (
         <Grid numItems={1} className="gap-2 w-full">
@@ -142,7 +151,9 @@ export function RegenerateKeyModal({
             </div>
             <Text className="mt-3">New API Key:</Text>
             <div className="bg-gray-100 p-2 rounded mb-2">
-              <pre className="break-words whitespace-normal">{regeneratedKey}</pre>
+              <pre className="break-words whitespace-normal">
+                {regeneratedKey}
+              </pre>
             </div>
             <CopyToClipboard
               text={regeneratedKey}
@@ -158,14 +169,20 @@ export function RegenerateKeyModal({
           layout="vertical"
           onValuesChange={(changedValues) => {
             if ("duration" in changedValues) {
-              setRegenerateFormData((prev: { duration?: string }) => ({ ...prev, duration: changedValues.duration }));
+              setRegenerateFormData((prev: { duration?: string }) => ({
+                ...prev,
+                duration: changedValues.duration,
+              }));
             }
           }}
         >
           <Form.Item name="key_alias" label="Key Alias">
             <TextInput disabled={true} />
           </Form.Item>
-          <Form.Item name="max_budget" label="Max Budget (EUR)">
+          <Form.Item
+            name="max_budget"
+            label={`Max Budget (${getCurrencyCode()})`}
+          >
             <InputNumber step={0.01} precision={2} style={{ width: "100%" }} />
           </Form.Item>
           <Form.Item name="tpm_limit" label="TPM Limit">
@@ -174,11 +191,18 @@ export function RegenerateKeyModal({
           <Form.Item name="rpm_limit" label="RPM Limit">
             <InputNumber style={{ width: "100%" }} />
           </Form.Item>
-          <Form.Item name="duration" label="Expire Key (eg: 30s, 30h, 30d)" className="mt-8">
+          <Form.Item
+            name="duration"
+            label="Expire Key (eg: 30s, 30h, 30d)"
+            className="mt-8"
+          >
             <TextInput placeholder="" />
           </Form.Item>
           <div className="mt-2 text-sm text-gray-500">
-            Current expiry: {selectedToken?.expires ? new Date(selectedToken.expires).toLocaleString() : "Never"}
+            Current expiry:{" "}
+            {selectedToken?.expires
+              ? new Date(selectedToken.expires).toLocaleString()
+              : "Never"}
           </div>
           {newExpiryTime && (
             <div className="mt-2 text-sm text-green-600">

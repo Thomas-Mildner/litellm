@@ -55,6 +55,7 @@ import {
 } from "../utils/roles";
 import { Team } from "./key_team_helpers/key_list";
 import { EntityList } from "./entity_usage";
+import { formatCurrency } from "@/utils/currencyUtils";
 
 interface NewUsagePageProps {
   accessToken: string | null;
@@ -427,12 +428,11 @@ const NewUsagePage: React.FC<NewUsagePageProps> = ({
                           <Card>
                             <Title>Average Cost per Request</Title>
                             <Text className="text-2xl font-bold mt-2">
-                              {(
+                              {formatCurrency(
                                 (totalSpend || 0) /
-                                (userSpendData.metadata?.total_api_requests ||
-                                  1)
-                              ).toFixed(4)}{" "}
-                              €
+                                  (userSpendData.metadata?.total_api_requests ||
+                                    1)
+                              )}
                             </Text>
                           </Card>
                         </Grid>
@@ -452,7 +452,9 @@ const NewUsagePage: React.FC<NewUsagePageProps> = ({
                           index="date"
                           categories={["metrics.spend"]}
                           colors={["cyan"]}
-                          valueFormatter={(value) => `${value.toFixed(2)}€`}
+                          valueFormatter={(value) =>
+                            `${formatCurrency(value.toFixed(2))}`
+                          }
                           yAxisWidth={100}
                           showLegend={false}
                           customTooltip={({ payload, active }) => {
@@ -462,7 +464,7 @@ const NewUsagePage: React.FC<NewUsagePageProps> = ({
                               <div className="bg-white p-4 shadow-lg rounded-lg border">
                                 <p className="font-bold">{data.date}</p>
                                 <p className="text-cyan-500">
-                                  Spend: {data.metrics.spend.toFixed(2)}€
+                                  Spend: {formatCurrency(data.metrics.spend)}
                                 </p>
                                 <p className="text-gray-600">
                                   Requests: {data.metrics.api_requests}
@@ -508,7 +510,9 @@ const NewUsagePage: React.FC<NewUsagePageProps> = ({
                           index="key"
                           categories={["spend"]}
                           colors={["cyan"]}
-                          valueFormatter={(value) => `${value.toFixed(2)}€`}
+                          valueFormatter={(value) =>
+                            `${formatCurrency(value.toFixed(2))}`
+                          }
                           layout="vertical"
                           yAxisWidth={200}
                           showLegend={false}
@@ -519,7 +523,7 @@ const NewUsagePage: React.FC<NewUsagePageProps> = ({
                               <div className="bg-white p-4 shadow-lg rounded-lg border">
                                 <p className="font-bold">{data.key}</p>
                                 <p className="text-cyan-500">
-                                  Spend: {data.spend.toFixed(2)}€
+                                  Spend: {formatCurrency(data.spend)}
                                 </p>
                                 <p className="text-gray-600">
                                   Total Requests:{" "}
@@ -556,7 +560,9 @@ const NewUsagePage: React.FC<NewUsagePageProps> = ({
                               data={getProviderSpend()}
                               index="provider"
                               category="spend"
-                              valueFormatter={(value) => `${value.toFixed(2)}€`}
+                              valueFormatter={(value) =>
+                                `${formatCurrency(value.toFixed(2))}`
+                              }
                               colors={["cyan"]}
                             />
                           </Col>
@@ -584,8 +590,7 @@ const NewUsagePage: React.FC<NewUsagePageProps> = ({
                                       <TableCell>
                                         {provider.spend < 0.00001
                                           ? "less than 0.00001"
-                                          : provider.spend.toFixed(2)}
-                                        €
+                                          : formatCurrency(provider.spend)}
                                       </TableCell>
                                       <TableCell className="text-green-600">
                                         {provider.successful_requests.toLocaleString()}

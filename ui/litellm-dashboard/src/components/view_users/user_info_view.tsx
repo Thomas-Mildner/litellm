@@ -23,6 +23,7 @@ import {
 import { message } from "antd";
 import { rolesWithWriteAccess } from "../../utils/roles";
 import { UserEditView } from "../user_edit_view";
+import { formatCurrency, getCurrencySymbol } from "@/utils/currencyUtils";
 
 interface UserInfoViewProps {
   userId: string;
@@ -268,7 +269,7 @@ export default function UserInfoView({
                   <Text>
                     of{" "}
                     {userData.user_info?.max_budget !== null
-                      ? `${userData.user_info.max_budget}€`
+                      ? `${formatCurrency(userData.user_info.max_budget)}`
                       : "Unlimited"}
                   </Text>
                 </div>

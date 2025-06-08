@@ -5,6 +5,7 @@ import { KeyResponse } from "./key_team_helpers/key_list";
 import { fetchTeamModels } from "../components/create_key_button";
 import { modelAvailableCall } from "./networking";
 import NumericalInput from "./shared/numerical_input";
+import { getCurrencyCode } from "@/utils/currencyUtils";
 interface KeyEditViewProps {
   keyData: KeyResponse;
   onCancel: () => void;
@@ -16,7 +17,10 @@ interface KeyEditViewProps {
 }
 
 // Add this helper function
-const getAvailableModelsForKey = (keyData: KeyResponse, teams: any[] | null): string[] => {
+const getAvailableModelsForKey = (
+  keyData: KeyResponse,
+  teams: any[] | null
+): string[] => {
   // If no teams data is available, return empty array
   console.log("getAvailableModelsForKey:", teams);
   if (!teams || !keyData.team_id) {
@@ -24,8 +28,8 @@ const getAvailableModelsForKey = (keyData: KeyResponse, teams: any[] | null): st
   }
 
   // Find the team that matches the key's team_id
-  const keyTeam = teams.find(team => team.team_id === keyData.team_id);
-  
+  const keyTeam = teams.find((team) => team.team_id === keyData.team_id);
+
   // If team found and has models, return those models
   if (keyTeam?.models) {
     return keyTeam.models;
@@ -34,17 +38,18 @@ const getAvailableModelsForKey = (keyData: KeyResponse, teams: any[] | null): st
   return [];
 };
 
-export function KeyEditView({ 
-    keyData, 
-    onCancel, 
-    onSubmit, 
-    teams,
-    accessToken,
-    userID,
-    userRole }: KeyEditViewProps) {
+export function KeyEditView({
+  keyData,
+  onCancel,
+  onSubmit,
+  teams,
+  accessToken,
+  userID,
+  userRole,
+}: KeyEditViewProps) {
   const [form] = Form.useForm();
   const [userModels, setUserModels] = useState<string[]>([]);
-  const team = teams?.find(team => team.team_id === keyData.team_id);
+  const team = teams?.find((team) => team.team_id === keyData.team_id);
   const [availableModels, setAvailableModels] = useState<string[]>([]);
 
   useEffect(() => {
@@ -56,7 +61,7 @@ export function KeyEditView({
           // Fetch user models if no team
           const model_available = await modelAvailableCall(
             accessToken,
-            userID, 
+            userID,
             userRole
           );
           const available_model_names = model_available["data"].map(
@@ -65,7 +70,12 @@ export function KeyEditView({
           setAvailableModels(available_model_names);
         } else if (team?.team_id) {
           // Fetch team models if team exists
-          const models = await fetchTeamModels(userID, userRole, accessToken, team.team_id);
+          const models = await fetchTeamModels(
+            userID,
+            userRole,
+            accessToken,
+            team.team_id
+          );
           setAvailableModels(Array.from(new Set([...team.models, ...models])));
         }
       } catch (error) {
@@ -82,7 +92,7 @@ export function KeyEditView({
     const durationMap: Record<string, string> = {
       "24h": "daily",
       "7d": "weekly",
-      "30d": "monthly"
+      "30d": "monthly",
     };
     return durationMap[duration] || null;
   };
@@ -92,7 +102,7 @@ export function KeyEditView({
     ...keyData,
     budget_duration: getBudgetDuration(keyData.budget_duration),
     metadata: keyData.metadata ? JSON.stringify(keyData.metadata, null, 2) : "",
-    guardrails: keyData.metadata?.guardrails || []
+    guardrails: keyData.metadata?.guardrails || [],
   };
 
   return (
@@ -114,10 +124,12 @@ export function KeyEditView({
         >
           {/* Only show All Team Models if team has models */}
           {availableModels.length > 0 && (
-            <Select.Option value="all-team-models">All Team Models</Select.Option>
+            <Select.Option value="all-team-models">
+              All Team Models
+            </Select.Option>
           )}
           {/* Show available team models */}
-          {availableModels.map(model => (
+          {availableModels.map((model) => (
             <Select.Option key={model} value={model}>
               {model}
             </Select.Option>
@@ -125,8 +137,12 @@ export function KeyEditView({
         </Select>
       </Form.Item>
 
-      <Form.Item label="Max Budget (EUR)" name="max_budget">
-        <NumericalInput step={0.01} style={{ width: "100%" }} placeholder="Enter a numerical value"/>
+      <Form.Item label={`Max Budget ${getCurrencyCode()}`} name="max_budget">
+        <NumericalInput
+          step={0.01}
+          style={{ width: "100%" }}
+          placeholder="Enter a numerical value"
+        />
       </Form.Item>
 
       <Form.Item label="Reset Budget" name="budget_duration">
@@ -138,23 +154,29 @@ export function KeyEditView({
       </Form.Item>
 
       <Form.Item label="TPM Limit" name="tpm_limit">
-        <NumericalInput min={0}/>
+        <NumericalInput min={0} />
       </Form.Item>
 
       <Form.Item label="RPM Limit" name="rpm_limit">
-        <NumericalInput min={0}/>
+        <NumericalInput min={0} />
       </Form.Item>
 
-      <Form.Item label="Max Parallel Requests" name="max_parallel_requests">  
-        <NumericalInput min={0}/>
+      <Form.Item label="Max Parallel Requests" name="max_parallel_requests">
+        <NumericalInput min={0} />
       </Form.Item>
 
       <Form.Item label="Model TPM Limit" name="model_tpm_limit">
-        <Input.TextArea rows={4}  placeholder='{"gpt-4": 100, "claude-v1": 200}'/>
+        <Input.TextArea
+          rows={4}
+          placeholder='{"gpt-4": 100, "claude-v1": 200}'
+        />
       </Form.Item>
 
       <Form.Item label="Model RPM Limit" name="model_rpm_limit">
-        <Input.TextArea rows={4}  placeholder='{"gpt-4": 100, "claude-v1": 200}'/>
+        <Input.TextArea
+          rows={4}
+          placeholder='{"gpt-4": 100, "claude-v1": 200}'
+        />
       </Form.Item>
 
       <Form.Item label="Guardrails" name="guardrails">
@@ -178,10 +200,8 @@ export function KeyEditView({
         <Button variant="light" onClick={onCancel}>
           Cancel
         </Button>
-        <Button>
-          Save Changes
-        </Button>
+        <Button>Save Changes</Button>
       </div>
     </Form>
   );
-} 
+}

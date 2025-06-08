@@ -2,19 +2,28 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge, Grid, Icon } from "@tremor/react";
 import { Tooltip } from "antd";
 import { UserInfo } from "./types";
-import { PencilAltIcon, TrashIcon, InformationCircleIcon } from "@heroicons/react/outline";
+import {
+  PencilAltIcon,
+  TrashIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/outline";
+import { getCurrencyCode, getCurrencySymbol } from "@/utils/currencyUtils";
 
 export const columns = (
   possibleUIRoles: Record<string, Record<string, string>>,
   handleEdit: (user: UserInfo) => void,
-  handleDelete: (userId: string) => void,
+  handleDelete: (userId: string) => void
 ): ColumnDef<UserInfo>[] => [
   {
     header: "User ID",
     accessorKey: "user_id",
     cell: ({ row }) => (
       <Tooltip title={row.original.user_id}>
-        <span className="text-xs">{row.original.user_id ? `${row.original.user_id.slice(0, 7)}...` : "-"}</span>
+        <span className="text-xs">
+          {row.original.user_id
+            ? `${row.original.user_id.slice(0, 7)}...`
+            : "-"}
+        </span>
       </Tooltip>
     ),
   },
@@ -35,7 +44,7 @@ export const columns = (
     ),
   },
   {
-    header: "User Spend (€ EUR)",
+    header: `User Spend (${getCurrencySymbol()} ${getCurrencyCode()})`,
     accessorKey: "spend",
     cell: ({ row }) => (
       <span className="text-xs">
@@ -44,11 +53,13 @@ export const columns = (
     ),
   },
   {
-    header: "User Max Budget (€ EUR)",
+    header: `User Max Budget (${getCurrencySymbol()} ${getCurrencyCode()})`,
     accessorKey: "max_budget",
     cell: ({ row }) => (
       <span className="text-xs">
-        {row.original.max_budget !== null ? row.original.max_budget : "Unlimited"}
+        {row.original.max_budget !== null
+          ? row.original.max_budget
+          : "Unlimited"}
       </span>
     ),
   },
@@ -91,7 +102,9 @@ export const columns = (
     sortingFn: "datetime",
     cell: ({ row }) => (
       <span className="text-xs">
-        {row.original.created_at ? new Date(row.original.created_at).toLocaleDateString() : "-"}
+        {row.original.created_at
+          ? new Date(row.original.created_at).toLocaleDateString()
+          : "-"}
       </span>
     ),
   },
@@ -101,7 +114,9 @@ export const columns = (
     sortingFn: "datetime",
     cell: ({ row }) => (
       <span className="text-xs">
-        {row.original.updated_at ? new Date(row.original.updated_at).toLocaleDateString() : "-"}
+        {row.original.updated_at
+          ? new Date(row.original.updated_at).toLocaleDateString()
+          : "-"}
       </span>
     ),
   },
@@ -123,4 +138,4 @@ export const columns = (
       </div>
     ),
   },
-]; 
+];

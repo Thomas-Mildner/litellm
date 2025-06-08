@@ -50,10 +50,7 @@ import {
   fetchAvailableModelsForTeamOrKey,
   getModelDisplayName,
 } from "./key_team_helpers/fetch_available_models_team_key";
-import {
-  MultiSelect,
-  MultiSelectItem,
-} from "@tremor/react";
+import { MultiSelect, MultiSelectItem } from "@tremor/react";
 import {
   Button as Button2,
   Modal,
@@ -72,6 +69,7 @@ import { KeyResponse } from "./key_team_helpers/key_list";
 import { AllKeysTable } from "./all_keys_table";
 import { Team } from "./key_team_helpers/key_list";
 import { Setter } from "@/types";
+import { getCurrencyCode } from "@/utils/currencyUtils";
 
 const isLocal = process.env.NODE_ENV === "development";
 const proxyBaseUrl = isLocal ? "http://localhost:4000" : null;
@@ -134,7 +132,7 @@ interface ItemData {
 }
 
 interface ModelLimits {
-  [key: string]: number;  // Index signature allowing string keys
+  [key: string]: number; // Index signature allowing string keys
 }
 
 interface CombinedLimit {
@@ -143,7 +141,7 @@ interface CombinedLimit {
 }
 
 interface CombinedLimits {
-  [key: string]: CombinedLimit;  // Index signature allowing string keys
+  [key: string]: CombinedLimit; // Index signature allowing string keys
 }
 
 const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
@@ -161,7 +159,7 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
   setCurrentOrg,
   selectedKeyAlias,
   setSelectedKeyAlias,
-  createClicked
+  createClicked,
 }) => {
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -170,10 +168,11 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
   const [spendData, setSpendData] = useState<
     { day: string; spend: number }[] | null
   >(null);
-  
-  // NEW: Declare filter states for team and key alias.
-  const [teamFilter, setTeamFilter] = useState<string>(selectedTeam?.team_id || "");
 
+  // NEW: Declare filter states for team and key alias.
+  const [teamFilter, setTeamFilter] = useState<string>(
+    selectedTeam?.team_id || ""
+  );
 
   // Keep the team filter in sync with the incoming prop.
   useEffect(() => {
@@ -190,7 +189,6 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
     accessToken,
     createClicked,
   });
-
 
   const handlePageChange = (newPage: number) => {
     refresh({ page: newPage });
@@ -280,7 +278,6 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
     fetchUserModels();
   }, [accessToken, userID, userRole]);
 
-
   useEffect(() => {
     if (teams) {
       const teamIDSet: Set<string> = new Set();
@@ -362,9 +359,9 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
       // Update the data state with the new key_name
       if (data) {
         const updatedData = data.map((item) =>
-          item.token === selectedToken?.token ?
-            { ...item, key_name: response.key_name, ...formValues }
-          : item
+          item.token === selectedToken?.token
+            ? { ...item, key_name: response.key_name, ...formValues }
+            : item
         );
         setData(updatedData);
       }
@@ -378,10 +375,9 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
     }
   };
 
-
   return (
     <div>
-      <AllKeysTable 
+      <AllKeysTable
         keys={keys}
         setKeys={setKeys}
         isLoading={isLoading}
@@ -474,7 +470,7 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
           </Button>,
         ]}
       >
-        {premiumUser ?
+        {premiumUser ? (
           <Form
             form={regenerateForm}
             layout="vertical"
@@ -487,7 +483,10 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
             <Form.Item name="key_alias" label="Key Alias">
               <TextInput disabled={true} />
             </Form.Item>
-            <Form.Item name="max_budget" label="Max Budget (EUR)">
+            <Form.Item
+              name="max_budget"
+              label={`Max Budget (${getCurrencyCode()})`}
+            >
               <InputNumber
                 step={0.01}
                 precision={2}
@@ -509,9 +508,9 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
             </Form.Item>
             <div className="mt-2 text-sm text-gray-500">
               Current expiry:{" "}
-              {selectedToken?.expires != null ?
-                new Date(selectedToken.expires).toLocaleString()
-              : "Never"}
+              {selectedToken?.expires != null
+                ? new Date(selectedToken.expires).toLocaleString()
+                : "Never"}
             </div>
             {newExpiryTime && (
               <div className="mt-2 text-sm text-green-600">
@@ -519,7 +518,8 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
               </div>
             )}
           </Form>
-        : <div>
+        ) : (
+          <div>
             <p className="mb-2 text-gray-500 italic text-[12px]">
               Upgrade to use this feature
             </p>
@@ -532,7 +532,7 @@ const ViewKeyTable: React.FC<ViewKeyTableProps> = ({
               </a>
             </Button>
           </div>
-        }
+        )}
       </Modal>
 
       {/* Regenerated Key Display Modal */}

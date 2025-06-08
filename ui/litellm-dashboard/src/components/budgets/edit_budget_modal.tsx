@@ -19,14 +19,15 @@ import {
 } from "antd";
 import { budgetUpdateCall } from "../networking";
 import { budgetItem } from "./budget_panel";
+import { getCurrencyCode } from "@/utils/currencyUtils";
 
 interface BudgetModalProps {
   isModalVisible: boolean;
   accessToken: string | null;
   setIsModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setBudgetList: React.Dispatch<React.SetStateAction<any[]>>;
-  existingBudget: budgetItem
-  handleUpdateCall: () => void
+  existingBudget: budgetItem;
+  handleUpdateCall: () => void;
 }
 const EditBudgetModal: React.FC<BudgetModalProps> = ({
   isModalVisible,
@@ -34,9 +35,9 @@ const EditBudgetModal: React.FC<BudgetModalProps> = ({
   setIsModalVisible,
   setBudgetList,
   existingBudget,
-  handleUpdateCall
+  handleUpdateCall,
 }) => {
-  console.log("existingBudget", existingBudget)
+  console.log("existingBudget", existingBudget);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -124,7 +125,10 @@ const EditBudgetModal: React.FC<BudgetModalProps> = ({
               <b>Optional Settings</b>
             </AccordionHeader>
             <AccordionBody>
-              <Form.Item label="Max Budget (EUR)" name="max_budget">
+              <Form.Item
+                label={`Max Budget (${getCurrencyCode()})`}
+                name="max_budget"
+              >
                 <InputNumber step={0.01} precision={2} width={200} />
               </Form.Item>
               <Form.Item

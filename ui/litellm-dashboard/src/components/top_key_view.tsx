@@ -6,6 +6,11 @@ import { transformKeyInfo } from "../components/key_team_helpers/transform_key_i
 import { DataTable } from "./view_logs/table";
 import { Tooltip } from "antd";
 import { Button } from "@tremor/react";
+import {
+  formatCurrency,
+  getCurrencyCode,
+  getCurrencySymbol,
+} from "@/utils/currencyUtils";
 
 interface TopKeyViewProps {
   topKeys: any[];
@@ -95,9 +100,10 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({
       cell: (info: any) => info.getValue() || "-",
     },
     {
-      header: "Spend (EUR)",
+      header: `Spend (${getCurrencyCode()})`,
       accessorKey: "spend",
-      cell: (info: any) => `${Number(info.getValue()).toFixed(2)}€`,
+      cell: (info: any) =>
+        `${formatCurrency(Number(info.getValue()).toFixed(2))}`,
     },
   ];
 
@@ -134,7 +140,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({
             showXAxis={false}
             showLegend={false}
             valueFormatter={(value) =>
-              value ? `${value.toFixed(2)}€` : "No Key Alias"
+              value ? formatCurrency(value.toFixed(2)) : "No Key Alias"
             }
             onValueChange={(item) => handleKeyClick(item)}
             showTooltip={true}
@@ -152,7 +158,7 @@ const TopKeyView: React.FC<TopKeyViewProps> = ({
                     <div className="text-sm">
                       <span className="text-gray-300">Spend: </span>
                       <span className="text-white font-medium">
-                        {item?.spend.toFixed(2)}€
+                        {formatCurrency(item?.spend)}
                       </span>
                     </div>
                   </div>

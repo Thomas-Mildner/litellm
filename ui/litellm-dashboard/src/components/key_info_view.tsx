@@ -26,6 +26,7 @@ import { Form, Input, InputNumber, message, Select } from "antd";
 import { KeyEditView } from "./key_edit_view";
 import { RegenerateKeyModal } from "./regenerate_key_modal";
 import { rolesWithWriteAccess } from "../utils/roles";
+import { formatCurrency } from "@/utils/currencyUtils";
 
 interface KeyInfoViewProps {
   keyId: string;
@@ -248,7 +249,7 @@ export default function KeyInfoView({
                   <Text>
                     of{" "}
                     {keyData.max_budget !== null
-                      ? `${keyData.max_budget}€`
+                      ? `${formatCurrency(keyData.max_budget)}`
                       : "Unlimited"}
                   </Text>
                 </div>
@@ -356,14 +357,16 @@ export default function KeyInfoView({
 
                   <div>
                     <Text className="font-medium">Spend</Text>
-                    <Text>{Number(keyData.spend).toFixed(4)} EUR</Text>
+                    <Text>
+                      {formatCurrency(Number(keyData.spend).toFixed(4))}
+                    </Text>
                   </div>
 
                   <div>
                     <Text className="font-medium">Budget</Text>
                     <Text>
                       {keyData.max_budget !== null
-                        ? `${keyData.max_budget} €`
+                        ? formatCurrency(keyData.max_budget)
                         : "Unlimited"}
                     </Text>
                   </div>

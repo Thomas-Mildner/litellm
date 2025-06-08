@@ -60,6 +60,7 @@ import {
 } from "./networking";
 import { start } from "repl";
 import TopKeyView from "./top_key_view";
+import { formatCurrency } from "@/utils/currencyUtils";
 console.log("process.env.NODE_ENV", process.env.NODE_ENV);
 const isLocal = process.env.NODE_ENV === "development";
 const proxyBaseUrl = isLocal ? "http://localhost:4000" : null;
@@ -113,7 +114,7 @@ const customTooltip = (props: CustomTooltipTypeBar) => {
               {":"}
               <span className="text-xs text-tremor-content-emphasis">
                 {" "}
-                {value ? `${value.toFixed(2)}€` : ""}
+                {value ? `${formatCurrency(value.toFixed(2))}` : ""}
               </span>
             </p>
           </div>
@@ -307,7 +308,8 @@ const UsagePage: React.FC<UsagePageProps> = ({
   console.log(`Start date is ${startTime}`);
   console.log(`End date is ${endTime}`);
 
-  const valueFormatter = (number: number) => `${number.toFixed(2)}€`;
+  const valueFormatter = (number: number) =>
+    `${formatCurrency(number.toFixed(2))}`;
 
   const fetchAndSetData = async (
     fetchFunction: () => Promise<any>,
@@ -739,7 +741,9 @@ const UsagePage: React.FC<UsagePageProps> = ({
                           layout="vertical"
                           showXAxis={false}
                           showLegend={false}
-                          valueFormatter={(value) => `${value.toFixed(2)}€`}
+                          valueFormatter={(value) =>
+                            `${formatCurrency(value.toFixed(2))}`
+                          }
                         />
                       </Card>
                     </Col>
@@ -758,7 +762,7 @@ const UsagePage: React.FC<UsagePageProps> = ({
                                 category="spend"
                                 colors={["cyan"]}
                                 valueFormatter={(value) =>
-                                  `${value.toFixed(2)}€`
+                                  `${formatCurrency(value.toFixed(2))}`
                                 }
                               />
                             </Col>

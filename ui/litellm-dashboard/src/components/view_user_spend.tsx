@@ -27,6 +27,7 @@ import {
 } from "@tremor/react";
 import { Statistic } from "antd";
 import { spendUsersCall, modelAvailableCall } from "./networking";
+import { formatCurrency, getCurrencySymbol } from "@/utils/currencyUtils";
 const isLocal = process.env.NODE_ENV === "development";
 const proxyBaseUrl = isLocal ? "http://localhost:4000" : null;
 if (isLocal != true) {
@@ -158,7 +159,7 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({
   }
 
   const displayMaxBudget =
-    maxBudget !== null ? `${maxBudget} € limit` : "No limit";
+    maxBudget !== null ? `${formatCurrency(maxBudget)} limit` : "No limit";
 
   const roundedSpend = spend !== undefined ? spend.toFixed(4) : null;
 
@@ -171,7 +172,7 @@ const ViewUserSpend: React.FC<ViewUserSpendProps> = ({
             Total Spend
           </p>
           <p className="text-2xl text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold">
-            {roundedSpend} €
+            {formatCurrency(roundedSpend)}
           </p>
         </div>
         <div>
